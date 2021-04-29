@@ -1,3 +1,6 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9125fab965d64fb397dd345a802ceff4)](https://www.codacy.com/gh/smaginv/voting/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=smaginv/voting&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/smaginv/voting.svg?branch=master)](https://travis-ci.com/smaginv/voting)
+
 REST API Voting System
 ===============================
 
