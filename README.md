@@ -256,7 +256,7 @@ GET (all restaurants with menu on date) Curl:
 Account controller:
 
 
-| Column 1 | Column 2              | Column 3      |
+| Method   | URL                   | Description   |
 | -------- | --------------------- | ------------- |
 | POST     | /api/account/register | Register user |
 
