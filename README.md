@@ -41,7 +41,7 @@ http://localhost:8080/v3/api-docs
 
 **REST API**
 
-##Administrator
+## Administrator
 
 Administrator controller:
 
@@ -77,7 +77,7 @@ GET (user by email) Curl:
 POST Curl:  
 `curl -X 'POST' 'http://localhost:8080/api/admin/accounts' -H 'Content-Type: application/json' -d '{"email": "new@mail.ru", "password": "pass", "name": "new user"}' --user admin@mail.ru:admin`
 
----
+#
 
 Dish Controller:
 
@@ -114,7 +114,7 @@ GET (all dishes today by restaurant id) Curl:
 GET (all dishes on date by restaurant id) Curl:  
 `curl -X 'GET' 'http://localhost:8080/api/restaurants/1/dishes/on-date?date=2021-04-11' --user admin@mail.ru:admin`
 
----
+#
 
 Restaurant Controller:
 
@@ -158,10 +158,9 @@ GET (all restaurants with today menu) Curl:
 GET (all restaurants with menu on date) Curl:  
 `curl -X 'GET' 'http://localhost:8080/api/restaurants/menu-on-date?date=2021-04-11' --user admin@mail.ru:admin`
 
----
+#
 
 Vote Controller:
-
 
 
 | Method | URL                               | Description                      |
@@ -218,7 +217,7 @@ PUT Curl:
 DELETE Curl:  
 `curl -X 'DELETE' 'http://localhost:8080/api/account' --user user@mail.ru:user`
 
----
+#
 
 Vote controller:
 
@@ -230,7 +229,7 @@ Vote controller:
 POST Curl:  
 `curl -X 'POST' 'http://localhost:8080/api/votes?restaurantId=3' --user user@mail.ru:user`
 
----
+#
 
 Restaurant Controller:
 
