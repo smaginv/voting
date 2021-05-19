@@ -12,7 +12,6 @@ import ru.graduation.voting.repository.UserRepository;
 import ru.graduation.voting.to.UserTo;
 import ru.graduation.voting.util.exception.NotFoundException;
 
-import java.util.Collections;
 import java.util.List;
 
 import static ru.graduation.voting.util.UserUtil.*;
@@ -47,7 +46,7 @@ public class UserService {
 
     @Cacheable("users")
     public List<UserTo> getAll() {
-        return createTos(userRepository.getAll().orElse(Collections.emptyList()));
+        return createTos(userRepository.getAll());
     }
 
     @CacheEvict(value = "users", allEntries = true)

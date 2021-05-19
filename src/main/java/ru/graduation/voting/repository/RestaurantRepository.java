@@ -19,7 +19,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     Optional<Restaurant> get(@Param("id") int id);
 
     @Query("SELECT r FROM Restaurant r ORDER BY r.id DESC")
-    Optional<List<Restaurant>> getAll();
+    List<Restaurant> getAll();
 
     @Transactional
     @Modifying
@@ -30,7 +30,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     Optional<Restaurant> getWithMenuOnDate(@Param("id") int id, @Param("date") LocalDate date);
 
     @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.FETCH)
-    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.dishes d WHERE d.date=:date ORDER BY r.id DESC")
-    Optional<List<Restaurant>> getAllWithMenuOnDate(@Param("date") LocalDate date);
-
+    @Query("SELECT r FROM Restaurant r LEFT JOIN r.dishes d WHERE d.date=:date ORDER BY r.id DESC")
+    List<Restaurant> getAllWithMenuOnDate(@Param("date") LocalDate date);
 }

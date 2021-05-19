@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> get(@Param("id") int id);
 
     @Query("SELECT u FROM User u ORDER BY u.id")
-    Optional<List<User>> getAll();
+    List<User> getAll();
 
     @Query("SELECT u FROM User u WHERE u.email = LOWER(:email)")
     Optional<User> getByEmail(String email);

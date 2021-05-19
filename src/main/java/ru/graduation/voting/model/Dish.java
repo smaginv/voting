@@ -13,7 +13,8 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "dishes", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "date"}, name = "dishes_unique_restaurant_name_date_idx"))
+@Table(name = "dishes", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "date", "restaurant_id"},
+        name = "dishes_unique_restaurant_name_date_idx"))
 public class Dish extends AbstractBaseEntity {
 
     @NotBlank
@@ -21,7 +22,7 @@ public class Dish extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Range(min = 1, max = 10000)
+    @Range(min = 1, max = 1000000)
     @Column(name = "price", nullable = false)
     private int price;
 
@@ -84,7 +85,6 @@ public class Dish extends AbstractBaseEntity {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", date=" + date +
-                ", restaurant=" + restaurant +
                 '}';
     }
 }

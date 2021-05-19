@@ -12,8 +12,8 @@ import ru.graduation.voting.to.RestaurantTo;
 import ru.graduation.voting.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.graduation.voting.util.RestaurantUtil.*;
 import static ru.graduation.voting.util.ValidationUtil.checkNotFoundWithId;
@@ -33,14 +33,12 @@ public class RestaurantService {
     }
 
     private Restaurant get(int id) {
-        return restaurantRepository.get(id).orElseThrow(
-                () -> new NotFoundException("Not found restaurant with id: " + id)
-        );
+        return getRestaurantFromOptional(restaurantRepository.get(id), id);
     }
 
     @Cacheable("restaurants")
     public List<RestaurantTo> getAll() {
-        return createTos(restaurantRepository.getAll().orElse(Collections.emptyList()));
+        return createTos(restaurantRepository.getAll());
     }
 
     @CacheEvict(value = {"restaurants", "restaurantsWithMenu"}, allEntries = true)
@@ -49,24 +47,20 @@ public class RestaurantService {
     }
 
     public Restaurant getWithMenuOnDate(int id, LocalDate date) {
-        return restaurantRepository.getWithMenuOnDate(id, date).orElseThrow(
-                () -> new NotFoundException("Not found restaurant with id: " + id)
-        );
+        return getRestaurantFromOptional(restaurantRepository.getWithMenuOnDate(id, date), id);
     }
 
     public Restaurant getWithMenuToday(int id) {
-        return restaurantRepository.getWithMenuOnDate(id, LocalDate.now()).orElseThrow(
-                () -> new NotFoundException("Not found restaurant with id: " + id)
-        );
+        return getRestaurantFromOptional(restaurantRepository.getWithMenuOnDate(id, LocalDate.now()), id);
     }
 
     public List<Restaurant> getAllWithMenuOnDate(LocalDate date) {
-        return restaurantRepository.getAllWithMenuOnDate(date).orElse(Collections.emptyList());
+        return restaurantRepository.getAllWithMenuOnDate(date);
     }
 
     @Cacheable("restaurantsWithMenu")
     public List<Restaurant> getAllWithMenuToday() {
-        return restaurantRepository.getAllWithMenuOnDate(LocalDate.now()).orElse(Collections.emptyList());
+        return restaurantRepository.getAllWithMenuOnDate(LocalDate.now());
     }
 
     @Transactional
@@ -82,5 +76,11 @@ public class RestaurantService {
         Assert.notNull(restaurantTo, "restaurant must not be null");
         Restaurant restaurant = updateFromTo(get(restaurantTo.id()), restaurantTo);
         return checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.id());
+    }
+
+    private Restaurant getRestaurantFromOptional(Optional<Restaurant> optional, int id) {
+        return optional.orElseThrow(
+                () -> new NotFoundException("Not found restaurant with id: " + id)
+        );
     }
 }

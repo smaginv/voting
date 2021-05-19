@@ -12,7 +12,6 @@ import ru.graduation.voting.repository.RestaurantRepository;
 import ru.graduation.voting.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,13 +32,13 @@ public class DishService {
 
     public Dish get(int id, int restaurantId) {
         return dishRepository.get(id, restaurantId).orElseThrow(
-                () -> new NotFoundException(String.format("Not found dish %d for restaurant %d", id, restaurantId))
+                () -> new NotFoundException("Not found dish with id: " + id)
         );
     }
 
     @Cacheable("dishes")
     public List<Dish> getAll(int restaurantId) {
-        return dishRepository.getAll(restaurantId).orElse(Collections.emptyList());
+        return dishRepository.getAll(restaurantId);
     }
 
     @CacheEvict(value = {"dishes", "dishesToday"}, allEntries = true)
@@ -48,12 +47,12 @@ public class DishService {
     }
 
     public List<Dish> getAllOnDate(int restaurantId, LocalDate date) {
-        return dishRepository.getAllOnDate(restaurantId, date).orElse(Collections.emptyList());
+        return dishRepository.getAllOnDate(restaurantId, date);
     }
 
     @Cacheable("dishesToday")
     public List<Dish> getAllToday(int restaurantId) {
-        return dishRepository.getAllToday(restaurantId).orElse(Collections.emptyList());
+        return dishRepository.getAllToday(restaurantId);
     }
 
     @Transactional
@@ -69,14 +68,15 @@ public class DishService {
     public Dish update(Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         if (!dish.isNew() && Objects.isNull(get(dish.id(), restaurantId))) {
-            throw new NotFoundException(String.format("Not found dish %d for restaurant %d", dish.id(), restaurantId));
+            throw new NotFoundException("Not found dish");
         }
         setRestaurant(dish, restaurantId);
         return dishRepository.save(dish);
     }
 
     private void setRestaurant(Dish dish, int restaurantId) {
-        dish.setRestaurant(restaurantRepository.get(restaurantId)
-                .orElseThrow(() -> new NotFoundException("Not found restaurant with id: " + restaurantId)));
+        dish.setRestaurant(restaurantRepository.get(restaurantId).orElseThrow(
+                () -> new NotFoundException("Not found restaurant with id: " + restaurantId)
+        ));
     }
 }
