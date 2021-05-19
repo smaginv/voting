@@ -30,6 +30,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return getErrorInfo(ex, request, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ErrorInfo> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        return getErrorInfo(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(DateTimeException.class)
     protected ResponseEntity<ErrorInfo> handleDateTime(DateTimeException ex, HttpServletRequest request) {
         return getErrorInfo(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);

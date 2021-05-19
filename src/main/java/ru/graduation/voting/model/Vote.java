@@ -5,15 +5,15 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "votes", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}, name = "vote_unique_userId_date_idx"))
 public class Vote extends AbstractBaseEntity {
 
     @NotNull
-    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
-    private LocalDateTime dateTime;
+    @Column(name = "date", nullable = false, columnDefinition = "date default now()")
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -28,17 +28,17 @@ public class Vote extends AbstractBaseEntity {
     public Vote() {
     }
 
-    public Vote(Integer id, LocalDateTime dateTime) {
+    public Vote(Integer id, LocalDate date) {
         super(id);
-        this.dateTime = dateTime;
+        this.date = date;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public User getUser() {

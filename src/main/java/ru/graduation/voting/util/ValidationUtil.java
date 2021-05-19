@@ -5,6 +5,7 @@ import ru.graduation.voting.model.Vote;
 import ru.graduation.voting.util.exception.NotFoundException;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static ru.graduation.voting.util.DateTimeUtil.BEFORE_END_OF_VOTE;
@@ -42,8 +43,8 @@ public class ValidationUtil {
     }
 
     public static void checkVoteTime(Vote vote) {
-        vote.setDateTime(LocalDateTime.now());
-        if (!isBefore(vote.getDateTime())) {
+        vote.setDate(LocalDate.now());
+        if (!isBefore(LocalDateTime.now())) {
             throw new DateTimeException(String.format("voting ended in %s", BEFORE_END_OF_VOTE));
         }
     }

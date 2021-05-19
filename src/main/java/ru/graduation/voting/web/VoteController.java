@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.graduation.voting.AuthUser;
 import ru.graduation.voting.model.Vote;
 import ru.graduation.voting.service.VoteService;
-import ru.graduation.voting.to.VoteTo;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -37,65 +36,38 @@ public class VoteController {
         this.voteService = voteService;
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get vote by id", description = "Get vote by id")
-    public VoteTo get(@PathVariable int id) {
-        log.info("get vote {} ", id);
-        return voteService.getTo(id);
-    }
-
-    @GetMapping("/users/{userId}/on-date")
-    @Operation(summary = "Get user vote on date", description = "Get user vote by user id on date")
-    public VoteTo getForUserOnDate(@PathVariable int userId, @RequestParam @Nullable LocalDate date) {
-        log.info("get user's {} vote for date {}", userId, date);
-        return voteService.getForUserOnDate(userId, date);
-    }
-
-    @GetMapping("/users/{userId}/today")
-    @Operation(summary = "Get user's vote today", description = "Get user's vote today by user id")
-    public VoteTo getForUserToday(@PathVariable int userId) {
-        log.info("get user's {} vote today", userId);
-        return voteService.getForUserToday(userId);
-    }
-
-    @GetMapping("/users/{userId}/all")
-    @Operation(summary = "Get all user votes", description = "Get user votes by user id")
-    public List<VoteTo> getAllForUser(@PathVariable int userId) {
-        log.info("get all vote's for user {}", userId);
-        return voteService.getAllForUser(userId);
-    }
-
-    @GetMapping("/on-date")
-    @Operation(summary = "Get all votes on date", description = "Get all votes on date")
-    public List<VoteTo> getAllOnDate(@RequestParam @Nullable LocalDate date) {
-        log.info("get all vote's on date {}", date);
-        return voteService.getAllOnDate(date);
-    }
-
     @GetMapping("/today")
     @Operation(summary = "Get all today votes", description = "Get all today votes")
-    public List<VoteTo> getAllToday() {
+    public List<Vote> getAllToday() {
         log.info("get all vote's today");
         return voteService.getAllToday();
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete vote", description = "Delete vote by id")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        log.info("delete vote {}", id);
-        voteService.delete(id);
+    @GetMapping("/on-date")
+    @Operation(summary = "Get all votes on date", description = "Get all votes on date")
+    public List<Vote> getAllOnDate(@RequestParam @Nullable LocalDate date) {
+        log.info("get all vote's on date {}", date);
+        return voteService.getAllOnDate(date);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "To vote", description = "To vote, only before 11:00")
-    public ResponseEntity<Vote> createOrUpdate(@AuthenticationPrincipal AuthUser authUser,
-                                               @RequestParam int restaurantId) {
-        log.info("create or update vote");
+    @Operation(summary = "to vote", description = "to vote for restaurant")
+    public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser,
+                                       @RequestParam int restaurantId) {
+        log.info("create vote");
         Vote created = voteService.save(authUser.getId(), restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{restaurantId}/{id}")
                 .buildAndExpand(restaurantId, created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "re-vote", description = "re-vote, only before 11:00")
+    public void update(@AuthenticationPrincipal AuthUser authUser,
+                       @RequestParam int restaurantId) {
+        log.info("update vote for user{}", authUser);
+        voteService.update(authUser.getId(), restaurantId);
     }
 }
