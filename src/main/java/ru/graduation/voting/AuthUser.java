@@ -5,11 +5,8 @@ import ru.graduation.voting.model.User;
 import ru.graduation.voting.to.UserTo;
 import ru.graduation.voting.util.UserUtil;
 
-import java.io.Serial;
-
 public class AuthUser extends org.springframework.security.core.userdetails.User {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     private UserTo userTo;
