@@ -1,8 +1,6 @@
 package ru.graduation.voting.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,18 +37,15 @@ public class VoteService {
         return getVoteFromOptional(voteRepository.get(id));
     }
 
-    @Cacheable("votes")
     public List<Vote> getAllToday() {
         return voteRepository.getAllOnDate(LocalDate.now());
     }
 
-    @Cacheable("votesOnDate")
     public List<Vote> getAllOnDate(@Nullable LocalDate date) {
         return voteRepository.getAllOnDate(date);
     }
 
     @Transactional
-    @CacheEvict(value = "votes", allEntries = true)
     public Vote save(int userId, int restaurantId) {
         Vote vote = voteRepository.getTodayUserVote(userId).orElse(new Vote());
         checkNew(vote);
@@ -61,7 +56,6 @@ public class VoteService {
     }
 
     @Transactional
-    @CacheEvict(value = "votes", allEntries = true)
     public Vote update(int userId, int restaurantId) {
         Vote vote = getVoteFromOptional(voteRepository.getTodayUserVote(userId));
         checkVoteTime(vote);

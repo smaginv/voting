@@ -1,8 +1,6 @@
 package ru.graduation.voting.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,25 +42,21 @@ public class UserService {
         return createTo(user);
     }
 
-    @Cacheable("users")
     public List<UserTo> getAll() {
         return createTos(userRepository.getAll());
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     public void delete(int id) {
         checkNotFoundWithId(userRepository.delete(id) != 0, id);
     }
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public UserTo save(UserTo userTo) {
         Assert.notNull(userTo, "user must not be null");
         return createTo(userRepository.save(createNewFromTo(userTo)));
     }
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public User update(UserTo userTo) {
         Assert.notNull(userTo, "user must not be null");
         return userRepository.save(updateFromTo(get(userTo.id()), userTo));

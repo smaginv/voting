@@ -2,7 +2,6 @@ package ru.graduation.voting.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -36,12 +35,11 @@ public class DishService {
         );
     }
 
-    @Cacheable("dishes")
     public List<Dish> getAll(int restaurantId) {
         return dishRepository.getAll(restaurantId);
     }
 
-    @CacheEvict(value = {"dishes", "dishesToday"}, allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id, int restaurantId) {
         checkNotFoundWithId(dishRepository.delete(id, restaurantId) != 0, id);
     }
@@ -50,13 +48,12 @@ public class DishService {
         return dishRepository.getAllOnDate(restaurantId, date);
     }
 
-    @Cacheable("dishesToday")
     public List<Dish> getAllToday(int restaurantId) {
         return dishRepository.getAllToday(restaurantId);
     }
 
     @Transactional
-    @CacheEvict(value = {"dishes", "dishesToday"}, allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Dish save(Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         setRestaurant(dish, restaurantId);
@@ -64,7 +61,7 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = {"dishes", "dishesToday"}, allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Dish update(Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         if (!dish.isNew() && Objects.isNull(get(dish.id(), restaurantId))) {

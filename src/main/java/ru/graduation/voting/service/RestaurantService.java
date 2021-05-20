@@ -36,12 +36,11 @@ public class RestaurantService {
         return getRestaurantFromOptional(restaurantRepository.get(id), id);
     }
 
-    @Cacheable("restaurants")
     public List<RestaurantTo> getAll() {
         return createTos(restaurantRepository.getAll());
     }
 
-    @CacheEvict(value = {"restaurants", "restaurantsWithMenu"}, allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id) {
         checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
@@ -58,20 +57,20 @@ public class RestaurantService {
         return restaurantRepository.getAllWithMenuOnDate(date);
     }
 
-    @Cacheable("restaurantsWithMenu")
+    @Cacheable("restaurants")
     public List<Restaurant> getAllWithMenuToday() {
         return restaurantRepository.getAllWithMenuOnDate(LocalDate.now());
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurants", "restaurantsWithMenu"}, allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant save(RestaurantTo restaurantTo) {
         Assert.notNull(restaurantTo, "restaurant must not be null");
         return restaurantRepository.save(createNewFromTo(restaurantTo));
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurants", "restaurantsWithMenu"}, allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant update(RestaurantTo restaurantTo) {
         Assert.notNull(restaurantTo, "restaurant must not be null");
         Restaurant restaurant = updateFromTo(get(restaurantTo.id()), restaurantTo);
