@@ -57,7 +57,7 @@ public class VoteController {
         return voteService.getAllOnDate(date);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     @Operation(summary = "to vote", description = "to vote for restaurant")
     public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser,
                                        @RequestParam int restaurantId) {
@@ -69,7 +69,7 @@ public class VoteController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "re-vote", description = "re-vote, only before 11:00")
     public void update(@AuthenticationPrincipal AuthUser authUser,

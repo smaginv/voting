@@ -50,35 +50,54 @@ Administrator controller:
 
 | Method | URL                       | Description       |
 | ------ | ------------------------- | ----------------- |
-| GET    | /api/admin/accounts/{id}  | Get user by id    |
-| PUT    | /api/admin/accounts/{id}  | Update user by id |
-| DELETE | /api/admin/accounts/{id}  | Delete user by id |
-| GET    | /api/admin/accounts       | Get all users     |
-| GET    | /api/admin/accounts/email | Get user by email |
-| POST   | /api/admin/accounts       | Create user       |
+| GET    | /api/admin/users/{id}     | Get user by id    |
+| PUT    | /api/admin/users/{id}     | Update user by id |
+| DELETE | /api/admin/users/{id}     | Delete user by id |
+| GET    | /api/admin/users          | Get all users     |
+| GET    | /api/admin/users/email    | Get user by email |
+| POST   | /api/admin/users          | Create user       |
 
 GET (user by id) Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/admin/accounts/1' --user admin@mail.ru:admin`
+`curl -X 'GET' 'http://localhost:8080/api/admin/users/1' --user admin@mail.ru:admin`
 
 
 PUT Curl:  
-`curl -X 'PUT' 'http://localhost:8080/api/admin/accounts/2' -H 'Content-Type: application/json' -d '{"email": "update@mail.ru", "password": "pass", "name": "update"}' --user admin@mail.ru:admin`
+`curl -X 'PUT' 'http://localhost:8080/api/admin/users/2' -H 'Content-Type: application/json' -d '{"email": "update@mail.ru", "password": "pass", "name": "update"}' --user admin@mail.ru:admin`
 
 
 DELETE Curl:  
-`curl -X 'DELETE' 'http://localhost:8080/api/admin/accounts/2' --user admin@mail.ru:admin`
+`curl -X 'DELETE' 'http://localhost:8080/api/admin/users/2' --user admin@mail.ru:admin`
 
 
 GET (all users) Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/admin/accounts' --user admin@mail.ru:admin`
+`curl -X 'GET' 'http://localhost:8080/api/admin/users' --user admin@mail.ru:admin`
 
 
 GET (user by email) Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/admin/accounts/email?email=user@mail.ru' --user admin@mail.ru:admin`
+`curl -X 'GET' 'http://localhost:8080/api/admin/users/email?email=user@mail.ru' --user admin@mail.ru:admin`
 
 
 POST Curl:  
-`curl -X 'POST' 'http://localhost:8080/api/admin/accounts' -H 'Content-Type: application/json' -d '{"email": "new@mail.ru", "password": "pass", "name": "new user"}' --user admin@mail.ru:admin`
+`curl -X 'POST' 'http://localhost:8080/api/admin/users' -H 'Content-Type: application/json' -d '{"email": "new@mail.ru", "password": "pass", "name": "new user"}' --user admin@mail.ru:admin`
+
+#
+
+Profile controller:
+
+| Method | URL                       | Description         |
+| ------ | ------------------------- | ------------------- |
+| GET    | /api/profile              | Get your details    |
+| PUT    | /api/profile              | Update your details |
+| DELETE | /api/profile              | Delete your account |
+
+GET Curl:  
+`curl -X 'GET' 'http://localhost:8080/api/profile' --user admin@mail.ru:admin`
+
+PUT Curl:  
+`curl -X 'PUT' 'http://localhost:8080/api/profile' -H 'Content-Type: application/json' -d '{"email": "updated@mail.ru", "password": "pass", "name": "updated"}' --user admin@mail.ru:admin`
+
+DELETE Curl:  
+`curl -X 'DELETE' 'http://localhost:8080/api/profile' --user admin@mail.ru:admin`
 
 #
 
@@ -141,7 +160,7 @@ PUT Curl:
 `curl -X 'PUT' 'http://localhost:8080/api/restaurants/4' -H 'Content-Type: application/json' -d '{"name": "update restaurant"}' --user admin@mail.ru:admin`
 
 DELETE Curl:  
-`curl -X 'DELETE' 'http://localhost:8080/api/restaurants/5' --user admin@mail.ru:admin`
+`curl -X 'DELETE' 'http://localhost:8080/api/restaurants/4' --user admin@mail.ru:admin`
 
 GET (all restaurants) Curl:  
 `curl -X 'GET' 'http://localhost:8080/api/restaurants' --user admin@mail.ru:admin`
@@ -169,27 +188,11 @@ Vote Controller:
 | Method | URL                               | Description                      |
 | ------ | --------------------------------- | -------------------------------- |
 | GET    | /api/votes/{id}                   | Get vote by id                   |
-| DELETE | /api/votes/{id}                   | Delete vote by id                |
-| GET    | /api/votes/users/{userId}/today   | Get user's vote today by user id |
-| GET    | /api/votes/users/{userId}/on-date | Get user vote by user id on date |
-| GET    | /api/votes/users/{userId}/all     | Get user votes by user id        |
 | GET    | /api/votes/today                  | Get all today votes              |
 | GET    | /api/votes/on-date                | Get all votes on date            |
 
 GET (vote by id) Curl:  
 `curl -X 'GET' 'http://localhost:8080/api/votes/3' --user admin@mail.ru:admin`
-
-DELETE Curl:  
-`curl -X 'DELETE' 'http://localhost:8080/api/votes/2' --user admin@mail.ru:admin`
-
-GET (user's vote today by user id) Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/votes/users/1/today' --user admin@mail.ru:admin`
-
-GET (user vote by user id on date) Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/votes/users/2/on-date?date=2021-04-12' --user admin@mail.ru:admin`
-
-GET (user votes by user id) Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/votes/users/2/all' --user admin@mail.ru:admin`
 
 GET (all today votes) Curl:  
 `curl -X 'GET' 'http://localhost:8080/api/votes/today' --user admin@mail.ru:admin`
@@ -201,24 +204,24 @@ GET (all votes on date) Curl:
 
 ## User
 
-Account controller:
+Profile controller:
 
 
 | Method | URL          | Description         |
 | ------ | ------------ | ------------------- |
-| GET    | /api/account | Get your details    |
-| PUT    | /api/account | Update your details |
-| DELETE | /api/account | Delete your account |
+| GET    | /api/profile | Get your details    |
+| PUT    | /api/profile | Update your details |
+| DELETE | /api/profile | Delete your account |
 
 
 GET Curl:  
-`curl -X 'GET' 'http://localhost:8080/api/account' --user user@mail.ru:user`
+`curl -X 'GET' 'http://localhost:8080/api/profile' --user user@mail.ru:user`
 
 PUT Curl:  
-`curl -X 'PUT' 'http://localhost:8080/api/account' -H 'Content-Type: application/json' -d '{"email": "update@mail.ru", "password": "pass", "name": "update"}' --user user@mail.ru:user`
+`curl -X 'PUT' 'http://localhost:8080/api/profile' -H 'Content-Type: application/json' -d '{"email": "update@mail.ru", "password": "pass", "name": "update"}' --user user@mail.ru:user`
 
 DELETE Curl:  
-`curl -X 'DELETE' 'http://localhost:8080/api/account' --user user@mail.ru:user`
+`curl -X 'DELETE' 'http://localhost:8080/api/profile' --user user@mail.ru:user`
 
 #
 
@@ -227,10 +230,14 @@ Vote controller:
 
 | Method | URL        | Description                |
 | ------ | ---------- | -------------------------- |
-| POST   | /api/votes | To vote, only before 11:00 |
+| POST   | /api/votes | To vote                    |
+| PUT    | /api/votes | Re-vote, only before 11:00 |
 
 POST Curl:  
 `curl -X 'POST' 'http://localhost:8080/api/votes?restaurantId=3' --user user@mail.ru:user`
+
+PUT Curl:  
+`curl -X 'PUT' 'http://localhost:8080/api/votes?restaurantId=1' --user user@mail.ru:user`
 
 #
 
@@ -258,7 +265,7 @@ Account controller:
 
 | Method   | URL                   | Description   |
 | -------- | --------------------- | ------------- |
-| POST     | /api/account/register | Register user |
+| POST     | /api/profile/register | Register user |
 
 POST Curl:  
-`curl -X 'POST' 'http://localhost:8080/api/account/register' -H 'Content-Type: application/json' -d '{"email": "register@mail.ru", "password": "pass", "name": "register"}'`
+`curl -X 'POST' 'http://localhost:8080/api/profile/register' -H 'Content-Type: application/json' -d '{"email": "register@mail.ru", "password": "pass", "name": "register"}'`
