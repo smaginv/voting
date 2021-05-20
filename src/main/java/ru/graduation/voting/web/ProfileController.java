@@ -12,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.graduation.voting.AuthUser;
-import ru.graduation.voting.model.User;
 import ru.graduation.voting.service.UserService;
 import ru.graduation.voting.to.UserTo;
 
@@ -23,18 +22,18 @@ import static ru.graduation.voting.util.ValidationUtil.assureIdConsistent;
 import static ru.graduation.voting.util.ValidationUtil.checkNew;
 
 @RestController
-@Tag(name = "Account controller")
-@RequestMapping(value = AccountController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AccountController {
+@Tag(name = "Profile controller")
+@RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class ProfileController {
 
-    static final String REST_URL = "/api/account";
+    static final String REST_URL = "/api/profile";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final UserService userService;
 
     @Autowired
-    public AccountController(UserService userService) {
+    public ProfileController(UserService userService) {
         this.userService = userService;
     }
 
@@ -47,7 +46,7 @@ public class AccountController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete user", description = "Delete your account")
+    @Operation(summary = "Delete user", description = "Delete your profile")
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete {}", authUser);
         userService.delete(authUser.getId());
@@ -56,10 +55,10 @@ public class AccountController {
     @PostMapping(value = "/register")
     @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(summary = "Register user", description = "Register user")
-    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
+    public ResponseEntity<UserTo> register(@Valid @RequestBody UserTo userTo) {
         log.info("register {}", userTo);
         checkNew(userTo);
-        User created = userService.save(userTo);
+        UserTo created = userService.save(userTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL).build().toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
@@ -68,13 +67,13 @@ public class AccountController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Update user", description = "Update your details")
-    public User update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody UserTo userTo) {
+    public void update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody UserTo userTo) {
         log.info("update {} to {}", authUser, userTo);
         UserTo oldUser = authUser.getUserTo();
         assureIdConsistent(userTo, oldUser.id());
         if (userTo.getPassword() == null) {
             userTo.setPassword(oldUser.getPassword());
         }
-        return userService.update(userTo);
+        userService.update(userTo);
     }
 }

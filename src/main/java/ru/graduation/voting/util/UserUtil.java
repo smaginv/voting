@@ -13,6 +13,10 @@ public class UserUtil {
         return new User(null, userTo.getEmail(), userTo.getPassword(), userTo.getName(), Role.USER);
     }
 
+    public static User cloneFromTo(UserTo userTo) {
+        return new User(userTo.getId(), userTo.getEmail(), userTo.getPassword(), userTo.getName(), Role.USER);
+    }
+
     public static UserTo createTo(User user) {
         return new UserTo(user.getId(), user.getEmail(), user.getPassword(), user.getName());
     }

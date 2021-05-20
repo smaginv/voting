@@ -56,9 +56,9 @@ public class UserService {
 
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
-    public User save(UserTo userTo) {
+    public UserTo save(UserTo userTo) {
         Assert.notNull(userTo, "user must not be null");
-        return userRepository.save(createNewFromTo(userTo));
+        return createTo(userRepository.save(createNewFromTo(userTo)));
     }
 
     @Transactional

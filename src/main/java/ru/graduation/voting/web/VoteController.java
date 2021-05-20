@@ -36,6 +36,13 @@ public class VoteController {
         this.voteService = voteService;
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get vote by id", description = "Get vote by id")
+    public Vote get(@PathVariable int id) {
+        log.info("get vote {} ", id);
+        return voteService.get(id);
+    }
+
     @GetMapping("/today")
     @Operation(summary = "Get all today votes", description = "Get all today votes")
     public List<Vote> getAllToday() {
@@ -57,8 +64,8 @@ public class VoteController {
         log.info("create vote");
         Vote created = voteService.save(authUser.getId(), restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{restaurantId}/{id}")
-                .buildAndExpand(restaurantId, created.getId()).toUri();
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

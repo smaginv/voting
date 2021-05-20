@@ -16,9 +16,9 @@ import static ru.graduation.voting.TestUtil.readFromJson;
 import static ru.graduation.voting.TestUtil.userHttpBasic;
 import static ru.graduation.voting.data.UserTestData.*;
 import static ru.graduation.voting.util.UserUtil.createTo;
-import static ru.graduation.voting.web.AccountController.REST_URL;
+import static ru.graduation.voting.web.ProfileController.REST_URL;
 
-class AccountControllerTest extends AbstractControllerTest {
+class ProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
     private UserService userService;

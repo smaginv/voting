@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.graduation.voting.model.User;
 import ru.graduation.voting.service.UserService;
 import ru.graduation.voting.to.UserTo;
 
@@ -26,7 +25,7 @@ import static ru.graduation.voting.util.ValidationUtil.checkNew;
 @RequestMapping(value = AdminController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController {
 
-    static final String REST_URL = "/api/admin/accounts";
+    static final String REST_URL = "/api/admin/users";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -69,10 +68,10 @@ public class AdminController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(summary = "Create user", description = "Create user")
-    public ResponseEntity<User> create(@Valid @RequestBody UserTo userTo) {
+    public ResponseEntity<UserTo> create(@Valid @RequestBody UserTo userTo) {
         log.info("create {}", userTo);
         checkNew(userTo);
-        User created = userService.save(userTo);
+        UserTo created = userService.save(userTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -82,13 +81,13 @@ public class AdminController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Update user", description = "Update user")
-    public User update(@PathVariable int id, @Valid @RequestBody UserTo userTo) {
+    public void update(@PathVariable int id, @Valid @RequestBody UserTo userTo) {
         log.info("update {}", userTo);
         UserTo oldUser = userService.getTo(id);
         assureIdConsistent(userTo, oldUser.id());
         if (userTo.getPassword() == null) {
             userTo.setPassword(oldUser.getPassword());
         }
-        return userService.update(userTo);
+        userService.update(userTo);
     }
 }

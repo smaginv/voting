@@ -3,8 +3,8 @@ package ru.graduation.voting.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.graduation.voting.data.UserTestData;
-import ru.graduation.voting.model.User;
 import ru.graduation.voting.model.Vote;
+import ru.graduation.voting.to.UserTo;
 import ru.graduation.voting.util.UserUtil;
 import ru.graduation.voting.util.exception.NotFoundException;
 
@@ -48,7 +48,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        User user = userService.save(UserUtil.createTo(UserTestData.getNew()));
+        UserTo user = userService.save(UserUtil.createTo(UserTestData.getNew()));
         Vote created = voteService.save(user.getId(), ONE_RESTAURANT_ID);
         int newId = created.id();
         Vote newVote = getNew();

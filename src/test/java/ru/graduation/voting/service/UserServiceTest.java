@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.graduation.voting.model.User;
+import ru.graduation.voting.to.UserTo;
 import ru.graduation.voting.util.exception.NotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.graduation.voting.data.TestData.*;
 import static ru.graduation.voting.data.UserTestData.*;
-import static ru.graduation.voting.util.UserUtil.createTo;
-import static ru.graduation.voting.util.UserUtil.createTos;
+import static ru.graduation.voting.util.UserUtil.*;
 
 class UserServiceTest extends AbstractServiceTest {
 
@@ -55,11 +55,11 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        User created = service.save(createTo(getNew()));
+        UserTo created = service.save(createTo(getNew()));
         int newId = created.id();
         User newUser = getNew();
         newUser.setId(newId);
-        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(cloneFromTo(created), newUser);
         USER_TO_MATCHER.assertMatch(service.getTo(newId), createTo(newUser));
     }
 
