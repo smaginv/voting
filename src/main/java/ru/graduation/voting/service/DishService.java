@@ -72,8 +72,6 @@ public class DishService {
     }
 
     private void setRestaurant(Dish dish, int restaurantId) {
-        dish.setRestaurant(restaurantRepository.get(restaurantId).orElseThrow(
-                () -> new NotFoundException("Not found restaurant with id: " + restaurantId)
-        ));
+        dish.setRestaurant(restaurantRepository.getOne(restaurantId));
     }
 }

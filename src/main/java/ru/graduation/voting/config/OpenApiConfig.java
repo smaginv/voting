@@ -27,7 +27,7 @@ public class OpenApiConfig {
 
     @Bean
     public GroupedOpenApi adminApi() {
-        String[] excludedPaths = {"/api/account/**", "/api/votes"};
+        String[] excludedPaths = {"/api/profile/register", "/api/votes"};
         return GroupedOpenApi.builder()
                 .group("admin")
                 .pathsToMatch("/api/**")
@@ -37,7 +37,7 @@ public class OpenApiConfig {
 
     @Bean
     public GroupedOpenApi userApi() {
-        String[] paths = {"/api/account", "/api/votes",
+        String[] paths = {"/api/profile", "/api/votes",
                 "/api/restaurants/menu-on-date", "/api/restaurants/menu-today"};
         return GroupedOpenApi.builder()
                 .group("user")
@@ -49,7 +49,7 @@ public class OpenApiConfig {
     public GroupedOpenApi anonymousApi() {
         return GroupedOpenApi.builder()
                 .group("anonymous")
-                .pathsToMatch("/api/account/register")
+                .pathsToMatch("/api/profile/register")
                 .build();
     }
 }

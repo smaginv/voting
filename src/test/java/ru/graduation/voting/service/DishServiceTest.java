@@ -77,19 +77,9 @@ class DishServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void createNotFound() {
-        assertThrows(NotFoundException.class, () -> service.save(getNew(), NOT_FOUND));
-    }
-
-    @Test
     void update() {
         Dish updated = getUpdated();
         service.save(updated, ONE_RESTAURANT_ID);
         DISH_MATCHER.assertMatch(service.get(DISH_ID, ONE_RESTAURANT_ID), getUpdated());
-    }
-
-    @Test
-    void updateNotFound() {
-        assertThrows(NotFoundException.class, () -> service.save(getUpdated(), NOT_FOUND));
     }
 }
